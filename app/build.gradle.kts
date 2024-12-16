@@ -113,6 +113,8 @@ dependencies {
 
     //work manager
     implementation(libs.androidx.work.runtime.ktx)
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 
     //charts
     implementation(libs.compose.charts)

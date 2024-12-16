@@ -25,6 +25,15 @@ class HomeVm @Inject constructor(
     private val _exchangeRates: MutableLiveData<NetworkResult<List<ExchangeRate>>> by lazy { MutableLiveData() }
     val exchangeRates: LiveData<NetworkResult<List<ExchangeRate>>> get() = _exchangeRates
 
+    init {
+        workerHelper.startLocationUpdates()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        workerHelper.stopLocationUpdates()
+    }
+
     fun getExchangeRates(baseCode: String) {
         viewModelScope.launch {
             _exchangeRates.postValue(NetworkResult.Loading())

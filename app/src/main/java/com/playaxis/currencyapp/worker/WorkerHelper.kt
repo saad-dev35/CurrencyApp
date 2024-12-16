@@ -3,6 +3,7 @@ package com.playaxis.currencyapp.worker
 import android.content.Context
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
@@ -18,6 +19,7 @@ class WorkerHelper @Inject constructor(
 
     companion object {
         private const val WORK_NAME = "ExchangeRateWorker"
+        private const val LOCATION_WORK_NAME = "LocationWorker"
         private const val BASE_CURRENCY_KEY = "base_currency"
     }
 
@@ -47,5 +49,22 @@ class WorkerHelper @Inject constructor(
 
     fun cancelScheduledWork() {
         WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
+    }
+
+    // Schedule LocationWorker as a one-time worker
+    fun startLocationUpdates() {
+        val oneTimeWorkRequest = OneTimeWorkRequest.Builder(LocationWorker::class.java)
+            .build()
+
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            LOCATION_WORK_NAME,
+            ExistingWorkPolicy.REPLACE,
+            oneTimeWorkRequest
+        )
+    }
+
+    // Stop LocationWorker
+    fun stopLocationUpdates() {
+        WorkManager.getInstance(context).cancelUniqueWork(LOCATION_WORK_NAME)
     }
 }
